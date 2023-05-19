@@ -20,10 +20,6 @@ class _App extends ConsumerWidget {
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
 
-  mode(ThemeMode mode) {
-    return mode == ThemeMode.light ? ThemeMode.light : ThemeMode.dark;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ValueListenableBuilder<ThemeMode>(
