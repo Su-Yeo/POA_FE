@@ -1,6 +1,8 @@
+import 'package:app/common/components/arts.dart';
 import 'package:app/common/components/custom_text_field.dart';
 import 'package:app/common/layout/base_layout.dart';
 import 'package:app/common/theme/color_schemes.g.dart';
+import 'package:app/home/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -88,11 +90,16 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          Container(
-            child: Center(
-              child: Text('홈'),
-            ),
+          HomeScreen(
+            themeNotifier: widget.themeNotifier,
           ),
+          // Container(
+          //   child: Center(
+          //     child: Arts(
+          //       themeNotifier: widget.themeNotifier,
+          //     ),
+          //   ),
+          // ),
           Container(
             child: Center(
               child: Text('찜'),
@@ -115,6 +122,10 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
           ),
         ],
       ),
+      // body: HomeScreen(
+      //   themeNotifier: widget.themeNotifier,
+      //   controller: controller,
+      // ),
       bottomNav: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: widget.themeNotifier.value == ThemeMode.light
