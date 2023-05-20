@@ -1,3 +1,4 @@
+import 'package:app/common/components/custom_text_field.dart';
 import 'package:app/common/layout/base_layout.dart';
 import 'package:app/common/theme/color_schemes.g.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,16 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
     with SingleTickerProviderStateMixin {
   late TabController controller;
   int index = 0;
-  final List tabName = ['홈', '찜', '검색', '구독', '내정보'];
-  final List tabIcon = [
+  bool isSearch = false;
+  List tabName = ['홈', '찜', '검색', '구독', '내정보'];
+  List tabIcon = [
     Icons.home,
     Icons.favorite,
     Icons.youtube_searched_for_sharp,
     Icons.bookmark_border,
     Icons.manage_accounts_rounded,
   ];
+  String searchText = '';
 
   @override
   void initState() {
@@ -52,15 +55,34 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-      title: tabName[index],
-      actionIcon: widget.themeNotifier.value == ThemeMode.light
+      title: isSearch
+          ? AnimatedOpacity(
+              opacity: isSearch ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 2000),
+              curve: Curves.bounceInOut,
+              child: searchBar(),
+            )
+          : Text(
+              tabName[index],
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+      leadingIcon: widget.themeNotifier.value == ThemeMode.light
           ? Icons.nightlight_round_rounded
           : Icons.sunny,
-      actionPressed: () {
+      leadingPressed: () {
         widget.themeNotifier.value =
             widget.themeNotifier.value == ThemeMode.light
                 ? ThemeMode.dark
                 : ThemeMode.light;
+      },
+      actionIcon: Icons.search,
+      actionPressed: () {
+        setState(() {
+          isSearch = !isSearch;
+        });
       },
       body: TabBarView(
         controller: controller,
@@ -110,6 +132,19 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
           ),
         ),
       ),
+    );
+  }
+
+  CustomTextField? searchBar() {
+    if (!isSearch) return null;
+    return CustomTextField(
+      hint: '검색어를 입력해 주세요',
+      isAutoFocused: true,
+      onChanged: (String value) {
+        print(value);
+        searchText = value;
+      },
+      themeNotifier: widget.themeNotifier,
     );
   }
 }
