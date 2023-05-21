@@ -1,4 +1,4 @@
-import 'package:app/common/components/arts.dart';
+import 'package:app/arts/components/arts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -44,6 +44,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         (BuildContext context, int index) {
           return Arts(
             themeNotifier: widget.themeNotifier,
+            writerName: '전은정',
+            artName: '잠이 솔솔오는 무화과향 향초',
+            artDescription:
+                '이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.이 작품의 설명입니다.',
+            percentage: 50,
+            period: '23.05.20 ~ 23.05.23',
           );
         },
         childCount: 5, // 전체 위젯 수

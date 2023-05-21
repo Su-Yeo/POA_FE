@@ -1,4 +1,4 @@
-import 'package:app/common/components/arts.dart';
+import 'package:app/arts/components/arts.dart';
 import 'package:app/common/components/custom_text_field.dart';
 import 'package:app/common/layout/base_layout.dart';
 import 'package:app/common/theme/color_schemes.g.dart';
