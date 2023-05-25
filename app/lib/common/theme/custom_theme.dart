@@ -75,3 +75,29 @@ var lightInputTheme = InputDecoration(
     ),
   ),
 );
+
+// 개별 Button Themes
+var darkButtonTheme = ElevatedButton.styleFrom(
+  padding: const EdgeInsets.all(16.0),
+  elevation: 0,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+  backgroundColor: darkColorScheme.primary,
+  foregroundColor: lightColorScheme.primary,
+  textStyle: const TextStyle(
+    fontSize: 14.0,
+  ),
+);
+var lightButtonTheme = ElevatedButton.styleFrom(
+  padding: const EdgeInsets.all(16.0),
+  elevation: 0,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+  backgroundColor: lightColorScheme.primary,
+  foregroundColor: darkColorScheme.primary,
+  textStyle: const TextStyle(
+    fontSize: 14.0,
+  ),
+);

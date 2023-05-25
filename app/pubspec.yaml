@@ -15,12 +15,15 @@ dependencies:
   dio: ^5.1.2 # 2023.05.18. http 요청
   flutter_secure_storage: ^8.0.0 # 2023.05.18. 민감 정보 저장
   carousel_slider: ^4.2.1 # 2023.05.20. 캐러셀 슬라이드
+  json_annotation: ^4.8.1 # 2023.05.22.
 
 # dev 모드 패키지 추가 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  json_serializable: ^6.7.0 # 2023.05.22. 
+  build_runner: ^2.4.4 # 2023.05.22.
 
 flutter:
   uses-material-design: true
