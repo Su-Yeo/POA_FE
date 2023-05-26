@@ -90,15 +90,13 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          HomeScreen(
-            themeNotifier: widget.themeNotifier,
+          Container(
+            child: Center(
+              child: Text('검색'),
+            ),
           ),
-          // Container(
-          //   child: Center(
-          //     child: Arts(
-          //       themeNotifier: widget.themeNotifier,
-          //     ),
-          //   ),
+          // HomeScreen(
+          //   themeNotifier: widget.themeNotifier,
           // ),
           AccessAuthScreen(),
           Container(

@@ -150,7 +150,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 : null;
           }
           return Art(
-            themeNotifier: widget.themeNotifier,
+            themeNotifier: widget.themeNotifier!,
           );
         },
         // childCount: 5, // 전체 위젯 수

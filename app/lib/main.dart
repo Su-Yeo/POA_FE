@@ -1,3 +1,4 @@
+import 'package:app/common/router/app_router.dart';
 import 'package:app/common/theme/custom_theme.dart';
 import 'package:app/common/views/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,15 @@ class _App extends ConsumerWidget {
       valueListenable: themeNotifier,
       builder: (_, ThemeMode currMode, __) {
         mode(currMode);
-        return MaterialApp(
+        return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           themeMode: currMode,
           darkTheme: darkThemeData,
           theme: lightThemeData,
-          home: SplashScreen(
-            themeNotifier: themeNotifier,
-          ),
+          // home: SplashScreen(
+          //   themeNotifier: themeNotifier,
+          // ),
+          routerConfig: AppRouter.router,
         );
       },
     );

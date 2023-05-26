@@ -16,6 +16,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0 # 2023.05.18. 민감 정보 저장
   carousel_slider: ^4.2.1 # 2023.05.20. 캐러셀 슬라이드
   json_annotation: ^4.8.1 # 2023.05.22.
+  go_router: ^7.1.1 # 2023.05.26. 라우터
 
 # dev 모드 패키지 추가 
 dev_dependencies:
