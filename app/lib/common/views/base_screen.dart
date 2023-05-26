@@ -2,10 +2,10 @@ import 'package:app/arts/components/arts.dart';
 import 'package:app/common/components/custom_text_field.dart';
 import 'package:app/common/layout/base_layout.dart';
 import 'package:app/common/theme/color_schemes.g.dart';
+import 'package:app/common/views/access_auth_screen.dart';
 import 'package:app/home/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BaseScreen extends ConsumerStatefulWidget {
@@ -100,11 +100,7 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
           //     ),
           //   ),
           // ),
-          Container(
-            child: Center(
-              child: Text('찜'),
-            ),
-          ),
+          AccessAuthScreen(),
           Container(
             child: Center(
               child: Text('검색'),
