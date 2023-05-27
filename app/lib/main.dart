@@ -1,6 +1,5 @@
 import 'package:app/common/router/app_router.dart';
 import 'package:app/common/theme/custom_theme.dart';
-import 'package:app/common/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,7 +34,7 @@ class _App extends ConsumerWidget {
           // home: SplashScreen(
           //   themeNotifier: themeNotifier,
           // ),
-          routerConfig: AppRouter.router,
+          routerConfig: AppRouter(themeNotifier: themeNotifier).router,
         );
       },
     );

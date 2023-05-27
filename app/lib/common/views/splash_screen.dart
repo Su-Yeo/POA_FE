@@ -8,10 +8,10 @@ import 'package:go_router/go_router.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   static String get routeName => 'splash';
-  final ValueNotifier? themeNotifier;
+  final ValueNotifier themeNotifier;
   const SplashScreen({
     super.key,
-    this.themeNotifier,
+    required this.themeNotifier,
   });
 
   @override
@@ -35,16 +35,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       Duration(milliseconds: 3000),
     ).then(
       (value) => context.go('/home'),
-      // Navigator.of(context).pushAndRemoveUntil(
-      //   MaterialPageRoute(
-      //     builder: (_) => BaseScreen(
-      //       themeNotifier: widget.themeNotifier!,
-      //     ),
-      //   ),
-      //   (route) => false,
-      // ),
-      // },
     );
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //       builder: (_) => BaseScreen(
+    //         themeNotifier: widget.themeNotifier,
+    //       ),
+    //     ),
+    //     (route) => false,
+    //   ),
+    // });
   }
 
   // 모든 토큰 지우기

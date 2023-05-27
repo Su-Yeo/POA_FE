@@ -141,19 +141,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          if (index == visibleItemCount) {
-            return showMoreButton
-                ? ElevatedButton(
-                    onPressed: loadMoreItems,
-                    child: Text('더보기'),
-                  )
-                : null;
+          if (index != visibleItemCount) {
+            // return showMoreButton
+            //     ? ElevatedButton(
+            //         onPressed: loadMoreItems,
+            //         child: Text('더보기'),
+            //       )
+            //     : SizedBox.shrink();
+            return Art(
+              themeNotifier: widget.themeNotifier,
+            );
           }
-          return Art(
-            themeNotifier: widget.themeNotifier!,
-          );
         },
-        // childCount: 5, // 전체 위젯 수
         childCount: visibleItemCount + 1,
       ),
     );
