@@ -1,17 +1,16 @@
-name: app
-description: POA(Power Of Arts)
-publish_to: 'none'
+name: fe
+description: A new Flutter project.
+publish_to: 'none' 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.0.2 <4.0.0'
 
-# 의존성 패키지 추가 (pub.dev)
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  flutter_riverpod: ^2.3.6 # 2023.05.18. 상태관리 추가
+  flutter_riverpod: ^2.3.6 # 2023.05.31.
   riverpod_annotation: ^2.1.1 # 2023.05.31. 상태관리 라이브러리 저장 
   dio: ^5.1.2 # 2023.05.18. http 요청
   flutter_secure_storage: ^8.0.0 # 2023.05.18. 민감 정보 저장
@@ -19,22 +18,20 @@ dependencies:
   json_annotation: ^4.8.1 # 2023.05.22.
   go_router: ^7.1.1 # 2023.05.26. 라우터
 
-# dev 모드 패키지 추가 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  json_serializable: ^6.7.0 # 2023.05.22. 
   build_runner: ^2.4.4 # 2023.05.22.
+  json_serializable: ^6.7.0 # 2023.05.22. 
   riverpod_generator: ^2.2.3 # 2023.05.31.
-
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/ # 이미지
-    - assets/icons/ # 아이콘
+    - assets/icons/
+    - assets/images/
 
   fonts:
     - family: Pretendard

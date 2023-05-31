@@ -1,4 +1,3 @@
-import 'package:app/categories/views/category_screen.dart';
 import 'package:app/common/views/base_screen.dart';
 import 'package:app/common/views/splash_screen.dart';
 import 'package:app/home/views/home_screen.dart';
@@ -29,11 +28,7 @@ class AppRouter {
                     themeNotifier: themeNotifier,
                   ),
                 ),
-                /* 카테고리 스크린 */
-                GoRoute(
-                  path: 'categories',
-                  builder: (context, state) => const CategoryScreen(),
-                ),
+
                 /* 내정보 스크린 */
                 GoRoute(
                   path: 'info',

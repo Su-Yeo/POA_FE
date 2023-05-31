@@ -1,15 +1,12 @@
-import 'package:app/common/layout/base_layout.dart';
-import 'package:app/common/theme/color_schemes.g.dart';
+import 'package:fe/common/layout/base_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   static String get routeName => 'splash';
-  final ValueNotifier themeNotifier;
   const SplashScreen({
     super.key,
-    required this.themeNotifier,
   });
 
   @override
@@ -42,16 +39,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-      backgrondColor: widget.themeNotifier!.value == ThemeMode.light
-          ? lightColorScheme.onBackground
-          : darkColorScheme.onBackground,
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/illu14.png',
+              'assets/images/logo_long.png',
               width: MediaQuery.of(context).size.width / 2,
             ),
             const SizedBox(
