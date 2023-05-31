@@ -35,6 +35,7 @@ class _BaseScreenState extends ConsumerState<BaseScreen> {
     required String iconPath,
     required String label,
     required String activeIconPath,
+    required bool isActive,
   }) {
     return BottomNavigationBarItem(
       icon: Image.asset(
@@ -46,7 +47,7 @@ class _BaseScreenState extends ConsumerState<BaseScreen> {
         fit: BoxFit.cover,
       ),
       label: label,
-      backgroundColor: Colors.black,
+      backgroundColor: isActive ? Colors.black : Colors.transparent,
     );
   }
 
@@ -74,21 +75,25 @@ class _BaseScreenState extends ConsumerState<BaseScreen> {
             iconPath: 'assets/icons/base_poa.png',
             activeIconPath: 'assets/icons/active_poa.png',
             label: 'Home',
+            isActive: getIndex(context) == 0,
           ),
           _bottomNavItem(
             iconPath: 'assets/icons/base_liked.png',
             activeIconPath: 'assets/icons/active_liked.png',
-            label: 'Liked',
+            label: 'Like',
+            isActive: getIndex(context) == 1,
           ),
           _bottomNavItem(
             iconPath: 'assets/icons/base_gallary.png',
             activeIconPath: 'assets/icons/active_gallary.png',
             label: 'Gallary',
+            isActive: getIndex(context) == 2,
           ),
           _bottomNavItem(
             iconPath: 'assets/icons/base_buy.png',
             activeIconPath: 'assets/icons/active_buy.png',
-            label: 'Buy',
+            label: 'User',
+            isActive: getIndex(context) == 3,
           ),
         ],
       ),
