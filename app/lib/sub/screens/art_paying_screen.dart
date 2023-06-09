@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:remedi_kopo/remedi_kopo.dart';
 
 class ArtPayingScreen extends ConsumerStatefulWidget {
   const ArtPayingScreen({super.key});
@@ -333,8 +334,12 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             const SizedBox(
               width: 8.0,
             ),
+            // 주소검색
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                HapticFeedback.mediumImpact();
+                _addressAPI();
+              },
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -368,6 +373,17 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         ),
       ],
     );
+  }
+
+  _addressAPI() async {
+    KopoModel model = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RemediKopo(),
+      ),
+    );
+    _addressController1.text =
+        '${model.zonecode!} ${model.address!} ${model.buildingName!}';
   }
 }
 
