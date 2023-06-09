@@ -1,103 +1,62 @@
-import 'package:app/common/theme/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 
-// 색상 선택
-mode(ThemeMode mode) {
-  return mode == ThemeMode.light
-      ? lightColorScheme.primary
-      : darkColorScheme.primary;
-}
+const primaryColor = Color(0xff000000);
+const lineColor = Color(0xff8e8e93);
+const bgColor = Color(0xfff5f5f5);
 
-var lightThemeData = ThemeData(
+var customThemeData = ThemeData(
   useMaterial3: true,
   fontFamily: 'Pretendard',
-  colorScheme: lightColorScheme,
-  primaryColor: lightColorScheme.primary,
-  hoverColor: darkColorScheme.primary,
-  hintColor: lightColorScheme.outlineVariant,
-);
-var darkThemeData = ThemeData(
-  useMaterial3: true,
-  fontFamily: 'Pretendard',
-  colorScheme: darkColorScheme,
-  primaryColor: darkColorScheme.primary,
-  hoverColor: lightColorScheme.primary,
-  hintColor: darkColorScheme.outlineVariant,
+  primaryColor: primaryColor,
+  textTheme: customTextTheme,
 );
 
-// 개별 Input Theme
-var darkInputTheme = InputDecoration(
-  focusColor: lightColorScheme.tertiary,
-  iconColor: lightColorScheme.primary,
-  fillColor: lightColorScheme.surfaceVariant,
+var customInputTheme = const InputDecoration(
   isCollapsed: true,
-  contentPadding: const EdgeInsets.all(16.0),
+  contentPadding: EdgeInsets.all(16.0),
   errorMaxLines: 1,
-  hintStyle: TextStyle(
-    // color: lightColorScheme.secondary,
-    fontSize: 13.0,
-  ),
+  fillColor: bgColor,
   focusedBorder: OutlineInputBorder(
     borderSide: BorderSide(
-      color: darkColorScheme.primary,
+      color: primaryColor,
       width: 1.0,
     ),
   ),
   enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(
-      color: lightColorScheme.primaryContainer,
+      color: lineColor,
       width: 1.0,
     ),
   ),
 );
 
-var lightInputTheme = InputDecoration(
-  focusColor: darkColorScheme.tertiary,
-  iconColor: darkColorScheme.primary,
-  fillColor: darkColorScheme.surfaceVariant,
-  isCollapsed: true,
-  contentPadding: const EdgeInsets.all(16.0),
-  errorMaxLines: 1,
-  hintStyle: TextStyle(
-    // color: darkColorScheme.secondary,
-    fontSize: 13.0,
+var customTextTheme = const TextTheme(
+  headlineLarge: TextStyle(
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold,
   ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(
-      color: lightColorScheme.primary,
-      width: 1.0,
-    ),
+  headlineMedium: TextStyle(
+    fontSize: 22.0,
+    fontWeight: FontWeight.w800,
   ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(
-      color: darkColorScheme.primaryContainer,
-      width: 1.0,
-    ),
+  headlineSmall: TextStyle(
+    fontSize: 18.0,
+    fontWeight: FontWeight.w700,
   ),
-);
-
-// 개별 Button Themes
-var darkButtonTheme = ElevatedButton.styleFrom(
-  padding: const EdgeInsets.all(16.0),
-  elevation: 0,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(8.0),
+  displayLarge: TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
   ),
-  backgroundColor: darkColorScheme.primary,
-  foregroundColor: lightColorScheme.primary,
-  textStyle: const TextStyle(
+  displayMedium: TextStyle(
     fontSize: 14.0,
+    fontWeight: FontWeight.w400,
   ),
-);
-var lightButtonTheme = ElevatedButton.styleFrom(
-  padding: const EdgeInsets.all(16.0),
-  elevation: 0,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(8.0),
+  displaySmall: TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.w300,
   ),
-  backgroundColor: lightColorScheme.primary,
-  foregroundColor: darkColorScheme.primary,
-  textStyle: const TextStyle(
-    fontSize: 14.0,
+  labelSmall: TextStyle(
+    fontSize: 10.0,
+    fontWeight: FontWeight.w200,
   ),
 );

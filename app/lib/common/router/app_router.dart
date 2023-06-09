@@ -1,42 +1,65 @@
-import 'package:app/common/views/base_screen.dart';
-import 'package:app/common/views/splash_screen.dart';
-import 'package:app/home/views/home_screen.dart';
-import 'package:app/user/views/user_info_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:app/base/screens/splash_screen.dart';
+import 'package:app/main/screens/gallary_screen.dart';
+import 'package:app/main/screens/home_screen.dart';
+import 'package:app/main/screens/like_screen.dart';
+import 'package:app/main/screens/user_screen.dart';
+import 'package:app/sub/screens/art_detail_screen.dart';
+import 'package:app/sub/screens/art_paying_result_screen.dart';
+import 'package:app/sub/screens/art_paying_screen.dart';
+import 'package:app/sub/screens/creator_info_screen.dart';
 import 'package:go_router/go_router.dart';
 
-class AppRouter {
-  final ValueNotifier<ThemeMode> themeNotifier;
-  final GoRouter router;
-
-/* 클래서 생성자에서 themeMotifier를 받은 후, 인스턴스 변수로 할당 */
-  AppRouter({
-    required this.themeNotifier,
-  }) : router = GoRouter(
+final appRouter = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (_, __) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: '/home',
+      name: 'Home',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/like',
+      name: 'Like',
+      builder: (context, state) => const LikeScreen(),
+    ),
+    GoRoute(
+      path: '/gallary',
+      name: 'Gallary',
+      builder: (context, state) => const GallaryScreen(),
+      routes: [
+        GoRoute(
+          path: ':index',
+          name: 'ArtDetail',
+          builder: (context, state) => ArtDetailScreen(),
           routes: <RouteBase>[
-            /* 스플래시 스크린 */
             GoRoute(
-              path: '/',
-              builder: (context, state) => SplashScreen(
-                themeNotifier: themeNotifier,
-              ),
-              routes: <RouteBase>[
-                /* 베이스 스크린(홈) */
-                GoRoute(
-                  path: 'home',
-                  builder: (context, state) => BaseScreen(
-                    themeNotifier: themeNotifier,
-                  ),
-                ),
-
-                /* 내정보 스크린 */
-                GoRoute(
-                  path: 'info',
-                  builder: (context, state) => const UserInfoScreen(),
-                ),
-              ],
+              path: 'paying',
+              name: 'ArtPaying',
+              builder: (context, state) => ArtPayingScreen(),
+            ),
+            GoRoute(
+              path: 'paying-result',
+              name: 'ArtPayingResult',
+              builder: (context, state) => ArtPayingResultScreen(),
             ),
           ],
-        );
-  // GoRouter get router => router;
-}
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/user',
+      name: 'User',
+      builder: (context, state) => const UserScreen(),
+      routes: [
+        GoRoute(
+          path: ':index',
+          name: 'CreatorDetail',
+          builder: (context, state) => CreatorInfoScreen(),
+        ),
+      ],
+    ),
+  ],
+);
