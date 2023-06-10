@@ -1,4 +1,5 @@
 import 'package:app/common/layout/base_layout.dart';
+import 'package:app/common/model/demmy_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +40,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         child: Row(
           children: [
             Image.asset(
-              'assets/images/user_profile.png',
+              userModel[0].profileUrl,
               fit: BoxFit.cover,
               width: 150,
             ),
@@ -53,7 +54,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '사용자 이름',
+                      userModel[0].name,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20.0,
@@ -61,7 +62,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       ),
                     ),
                     Text(
-                      '사용자 인포메이션 영역 사용자 인포메이션 영역 사용자 인포메이션 영역 사용자 인포메이션 영역 사용자 인포메이션 영역',
+                      userModel[0].email,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: TextStyle(
@@ -126,7 +127,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               path: 'assets/icons/user_buying.png',
               hasTop: false,
               onTap: () {
-                context.go('/user/buying-list');
+                context.go('/user/list');
+                // context.go('/user/buying-list');
               },
             ),
             _ListTileContainer(

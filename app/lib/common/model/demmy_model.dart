@@ -1,4 +1,5 @@
 import 'package:app/common/model/art_work_model.dart';
+import 'package:app/common/model/user_model.dart';
 
 List<ArtWorkModel> models = [
   ArtWorkModel(
@@ -96,5 +97,17 @@ List<ArtWorkModel> models = [
     disableType: '다운증후군',
     disableContent:
         '다운증후군 환자들 스스로는 큰 불행의 감정을 느끼지 않는 것으로 알려져 있다. 즉 적당한 생활 환경과 보호가 주어진다면 어느 정도 행복하게 일생을 살 수 있는 것. 특히 증세가 경미한 일부 환자의 경우, 부분적으로나마 일반인과 함께 정상적인 삶을 영위하기도 한다.',
+  ),
+];
+
+List<UserModel> userModel = [
+  UserModel(
+    userId: 0,
+    email: 'test@email.com',
+    name: '포니어',
+    phone: '010-1234-5678',
+    nick: '포니어',
+    profileUrl: 'assets/images/user_profile.png',
+    address: '서울특별시 송파구',
   ),
 ];

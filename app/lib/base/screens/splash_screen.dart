@@ -25,7 +25,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> checkToken() async {
     return Future.delayed(
       const Duration(
-        milliseconds: 3000,
+        milliseconds: 500,
       ),
     ).then(
       (value) => context.go(

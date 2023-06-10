@@ -7,6 +7,7 @@ import 'package:app/sub/screens/art_detail_screen.dart';
 import 'package:app/sub/screens/art_paying_result_screen.dart';
 import 'package:app/sub/screens/art_paying_screen.dart';
 import 'package:app/sub/screens/creator_info_screen.dart';
+import 'package:app/sub/screens/user_buying_list_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
@@ -54,6 +55,11 @@ final appRouter = GoRouter(
       name: 'User',
       builder: (context, state) => const UserScreen(),
       routes: [
+        GoRoute(
+          path: 'list',
+          name: 'UserBuyingList',
+          builder: (context, state) => UserBuyingListScreen(),
+        ),
         GoRoute(
           path: ':index',
           name: 'CreatorDetail',
