@@ -18,6 +18,7 @@ class _App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
+      // builder: FToastBuilder(),
       debugShowCheckedModeBanner: false,
       theme: customThemeData,
       themeMode: ThemeMode.system,

@@ -1,6 +1,8 @@
+import 'package:app/common/const/format_amount.dart';
+import 'package:app/common/model/demmy_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ArtPayingResultScreen extends ConsumerStatefulWidget {
   const ArtPayingResultScreen({super.key});
@@ -11,8 +13,11 @@ class ArtPayingResultScreen extends ConsumerStatefulWidget {
 }
 
 class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
+  int pathParam = 0;
+
   @override
   Widget build(BuildContext context) {
+    pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -45,7 +50,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
         child: Row(
           children: [
             Image.asset(
-              'assets/images/image1.jpg',
+              models[pathParam].fileUrl,
               fit: BoxFit.contain,
               width: 150,
               height: 150,
@@ -55,21 +60,21 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '사랑을 받는다',
+                    models[pathParam].title,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
                   ),
                   Text(
-                    '작가정보: 정은혜',
+                    '작가정보: ${models[pathParam].creator}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
                     ),
                   ),
                   Text(
-                    '작품가격: 85,000원',
+                    '작품가격: ${formatAmount(models[pathParam].artworkPrice.toString())}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
@@ -106,6 +111,34 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
             ),
             Text(
               '독자님의 응원이 독자님께 큰 힘이 됩니다.',
+            ),
+            const SizedBox(
+              height: 24.0,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.go('/gallary');
+                    },
+                    child: Text(
+                      '확인',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          4.0,
+                        ),
+                      ),
+                      backgroundColor: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

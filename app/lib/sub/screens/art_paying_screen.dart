@@ -1,4 +1,6 @@
-import 'package:app/common/layout/base_layout.dart';
+import 'package:app/base/components/dlg_confirm.dart';
+import 'package:app/common/const/format_amount.dart';
+import 'package:app/common/model/demmy_model.dart';
 import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +23,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
   String addressValue = '';
   String addressDetailValue = '';
   String selectPayOption = '';
+  int pathParam = 0;
 
   @override
   void dispose() {
@@ -30,11 +33,26 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
     super.dispose();
   }
 
+  void confirmPurchase(BuildContext context, int pathParam) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DlgConfirm(
+          onConfirm: () {
+            context.pop(context);
+            context.go('/gallary/${pathParam}/paying-result');
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '구매하기',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -54,7 +72,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         color: Colors.white,
         child: ElevatedButton(
           onPressed: () {
-            context.go('/gallary/1/paying-result');
+            confirmPurchase(context, pathParam);
           },
           child: Text(
             '구매하기',
@@ -88,7 +106,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         child: Row(
           children: [
             Image.asset(
-              'assets/images/image1.jpg',
+              models[pathParam].fileUrl,
               fit: BoxFit.contain,
               width: 150,
               height: 150,
@@ -98,21 +116,21 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '사랑을 받는다',
+                    models[pathParam].title,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
                   ),
                   Text(
-                    '작가정보: 정은혜',
+                    '작가정보: ${models[pathParam].creator}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
                     ),
                   ),
                   Text(
-                    '작품가격: 85,000원',
+                    '작품가격: ${formatAmount(models[pathParam].artworkPrice.toString())}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
@@ -144,7 +162,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             ),
             child: Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16.0,
               ),
@@ -168,8 +186,8 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16.0),
               child: Text(
                 '구매자 정보',
                 style: TextStyle(
@@ -180,7 +198,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             ),
             _midInputForm(
               label: '이   름',
-              input: Text(
+              input: const Text(
                 '포니어',
               ),
             ),
@@ -192,31 +210,31 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
               label: '주   소',
               input: _midAddressInfo(),
             ),
-            _midInputForm(
-              label: '이메일',
-              input: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '가입시 이메일 정보 불러오기',
-                  ),
-                  Text(
-                    '* 위 연락처와 이메일로 구매 관련 소식이 전달됩니다.',
-                    style: TextStyle(
-                      fontSize: 10.0,
-                      color: lineColor,
-                    ),
-                  ),
-                  Text(
-                    '* 연락처 및 이메일 변경은 설정 > 계정에서 가능합니다.',
-                    style: TextStyle(
-                      fontSize: 10.0,
-                      color: lineColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // _midInputForm(
+            //   label: '이메일',
+            //   input: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         '가입시 이메일 정보 불러오기',
+            //       ),
+            //       Text(
+            //         '* 위 연락처와 이메일로 구매 관련 소식이 전달됩니다.',
+            //         style: TextStyle(
+            //           fontSize: 10.0,
+            //           color: lineColor,
+            //         ),
+            //       ),
+            //       Text(
+            //         '* 연락처 및 이메일 변경은 설정 > 계정에서 가능합니다.',
+            //         style: TextStyle(
+            //           fontSize: 10.0,
+            //           color: lineColor,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -232,8 +250,8 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
               child: Text(
                 '결제 수단',
                 style: TextStyle(
@@ -244,8 +262,9 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             ),
             ListTile(
               dense: true,
-              title: Text('카드결제'),
+              title: const Text('카드결제'),
               leading: Radio(
+                autofocus: true,
                 value: '카드결제',
                 activeColor: Colors.red,
                 groupValue: selectPayOption,
@@ -268,7 +287,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
+                    const Text(
                       '최종 결제 금액',
                       style: TextStyle(
                         color: Colors.red,
@@ -276,8 +295,8 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                       ),
                     ),
                     Text(
-                      '85,000원',
-                      style: TextStyle(
+                      formatAmount(models[pathParam].artworkPrice.toString()),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -285,7 +304,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                 ),
               ),
             ),
-            Text(
+            const Text(
               '주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.',
               style: TextStyle(
                 fontSize: 10.0,
@@ -303,7 +322,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
     return TextFormField(
       controller: _contactController,
       keyboardType: TextInputType.phone,
-      decoration: customInputTheme,
+      decoration: customInputTheme.copyWith(hintText: '010-0000-0000'),
       onChanged: (value) {
         contactValue = value;
       },
@@ -349,7 +368,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                 ),
                 backgroundColor: primaryColor,
               ),
-              child: Text(
+              child: const Text(
                 '주소 검색',
                 style: TextStyle(
                   color: Colors.white,

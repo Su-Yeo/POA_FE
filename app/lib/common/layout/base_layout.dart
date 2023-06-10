@@ -43,12 +43,8 @@ class BaseLayout extends StatelessWidget {
   // 3. 바텀바
   BottomNavigationBar _bottomNav(BuildContext context) {
     return BottomNavigationBar(
-      unselectedLabelStyle: const TextStyle(
-        color: lineColor,
-      ),
-      selectedLabelStyle: const TextStyle(
-        color: primaryColor,
-      ),
+      unselectedItemColor: lineColor,
+      selectedItemColor: primaryColor,
       type: BottomNavigationBarType.fixed,
       onTap: (int index) {
         if (index == 0) {

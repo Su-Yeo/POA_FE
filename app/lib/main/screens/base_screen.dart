@@ -53,20 +53,6 @@ class _BaseScreenState extends ConsumerState<BaseScreen>
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-      // title: isSearch
-      //     ? AnimatedOpacity(
-      //         opacity: isSearch ? 1.0 : 0.0,
-      //         duration: const Duration(milliseconds: 2000),
-      //         curve: Curves.bounceInOut,
-      //         child: searchBar(),
-      //       )
-      //     : Text(
-      //         tabName[index],
-      //         style: const TextStyle(
-      //           fontSize: 16.0,
-      //           fontWeight: FontWeight.bold,
-      //         ),
-      //       ),
       body: TabBarView(
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),

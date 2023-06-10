@@ -1,7 +1,9 @@
 import 'package:app/common/layout/base_layout.dart';
+import 'package:app/common/model/demmy_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +16,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-      // needAppBar: false,
       appBarTitle: Image.asset(
         'assets/icons/logo_short.png',
         fit: BoxFit.contain,
@@ -24,64 +25,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           Column(
             children: [
+              const SizedBox(
+                height: 100,
+              ),
               Expanded(
                 child: CarouselSlider(
                   options: CarouselOptions(
-                    // height: 400,
                     autoPlay: true,
                     enlargeCenterPage: true,
-                    aspectRatio: 1,
-                    enlargeFactor: 0.4,
-                    autoPlayCurve: Curves.ease,
+                    aspectRatio: 3 / 4,
+                    enlargeFactor: 0.3,
+                    autoPlayCurve: Curves.decelerate,
                     viewportFraction: 0.7,
-                    autoPlayAnimationDuration: Duration(
-                      seconds: 1,
+                    autoPlayAnimationDuration: const Duration(
+                      seconds: 3,
                     ),
                   ),
-                  items: [1, 2, 3, 4, 5].map(
-                    (index) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return GestureDetector(
-                            onTap: () {
-                              print(index);
-                            },
-                            child: Column(
-                              children: [
-                                Flexible(
-                                  flex: 5,
-                                  child: Card(
-                                    elevation: 4,
-                                    child: Image.asset(
-                                      'assets/images/image${index}.jpg',
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                ),
-                                Text(
-                                  '사랑을 받는다',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '작가 정은혜',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                  items: models.map(
+                    (data) {
+                      return GestureDetector(
+                        onTap: () {
+                          context.go('/gallary/${data.artworkId}');
                         },
+                        child: Column(
+                          children: [
+                            Flexible(
+                              flex: 5,
+                              child: Card(
+                                elevation: 4,
+                                child: Image.asset(
+                                  data.fileUrl,
+                                  fit: BoxFit.cover,
+                                  width: MediaQuery.of(context).size.width,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            Text(
+                              data.title,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '작가 ${data.creator}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ).toList(),

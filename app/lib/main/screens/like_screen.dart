@@ -1,5 +1,7 @@
 import 'package:app/base/components/art.dart';
 import 'package:app/common/layout/base_layout.dart';
+import 'package:app/common/model/art_work_model.dart';
+import 'package:app/common/model/demmy_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -18,12 +20,15 @@ class LikeScreen extends ConsumerWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.0),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 32.0,
+              vertical: 8.0,
+            ),
             child: Text(
-              '관심있는 작품 (2)',
+              '관심있는 작품 (${models.length})',
               style: TextStyle(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -31,22 +36,21 @@ class LikeScreen extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 32.0,
-                vertical: 8.0,
               ),
               child: ListView.builder(
-                // shrinkWrap: true,
-                itemCount: 2,
+                itemCount: 1,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        context.go('/gallary/${index}');
-                      },
-                      child: Art(),
-                    ),
+                  return Column(
+                    children: models.map((data) {
+                      return GestureDetector(
+                        onTap: () {
+                          context.go('/gallary/${data.artworkId}');
+                        },
+                        child: Art(
+                          model: data,
+                        ),
+                      );
+                    }).toList(),
                   );
                 },
               ),

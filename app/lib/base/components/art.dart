@@ -1,8 +1,13 @@
+import 'package:app/common/model/art_work_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Art extends ConsumerWidget {
-  const Art({super.key});
+  final ArtWorkModel model;
+  const Art({
+    super.key,
+    required this.model,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +32,7 @@ class Art extends ConsumerWidget {
                 child: Card(
                   elevation: 4,
                   child: Image.asset(
-                    'assets/images/image3.jpg',
+                    model.fileUrl,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width * 0.9,
                   ),
@@ -37,14 +42,14 @@ class Art extends ConsumerWidget {
                 height: 8.0,
               ),
               Text(
-                '무지개 놀이',
+                model.title,
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                '작가 김포아',
+                '작가 ${model.creator}',
               ),
             ],
           ),

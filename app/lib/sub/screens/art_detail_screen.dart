@@ -1,6 +1,8 @@
+import 'package:app/common/const/format_amount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:app/common/model/demmy_model.dart';
 
 class ArtDetailScreen extends ConsumerStatefulWidget {
   const ArtDetailScreen({super.key});
@@ -12,11 +14,26 @@ class ArtDetailScreen extends ConsumerStatefulWidget {
 class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   bool isLike = false;
   bool isSoldOut = false;
+  int pathParam = 0;
+
+  // 스낵바
+  void showSnackbar(BuildContext context, String message) {
+    final snackbar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(
+        seconds: 2,
+      ),
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   @override
   Widget build(BuildContext context) {
+    pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '작품 소개',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -30,28 +47,28 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
           slivers: [
             _topArtInfo(
               context: context,
-              imagePath: 'assets/images/image5.jpg',
-              artTitle: '작품 타이틀',
-              creator: '작가 금채민',
+              imagePath: models[pathParam].fileUrl,
+              artTitle: models[pathParam].title,
+              creator: '작가 ${models[pathParam].creator}',
             ),
             _divider(),
             _midInfo(
               title: '작품 정보',
-              content: '가격: ₩57,000\n 사이즈: 60 x 42cm',
+              content:
+                  '가격: ${formatAmount(models[pathParam].artworkPrice.toString())}\n사이즈: ${models[pathParam].artworkSize}',
             ),
             _divider(),
             _midInfo(
               title: '작품 소개',
-              content:
-                  '사람을 안아주는 게 좋아요 \n 사람을 안아주는 게 좋아요 \n 사람을 안아주는 게 좋아요\n 사람을 안아주는 게 좋아요',
+              content: models[pathParam].content,
             ),
             _divider(),
             _bottomInfo(
               btnPressed: () {
-                context.go('/user/1');
+                context.go('/user/${models[pathParam].userId}');
               },
               title: '작가 정보',
-              creator: '작가 금채민',
+              creator: '작가 ${models[pathParam].creator}',
               index: 1,
             ),
           ],
@@ -65,6 +82,15 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
               onPressed: () {
                 setState(() {
                   isLike = !isLike;
+                  isLike
+                      ? showSnackbar(
+                          context,
+                          '응원을 더했습니다',
+                        )
+                      : showSnackbar(
+                          context,
+                          '응원을 취소했습니다',
+                        );
                 });
               },
               child: Image.asset(
@@ -88,16 +114,19 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      4.0,
+                    ),
+                  ),
                   backgroundColor: !isSoldOut ? Colors.black : Colors.grey,
                 ),
                 onPressed: isSoldOut
                     ? null
                     : () {
-                        context.go('/gallary/1/paying');
+                        context.go(
+                            '/gallary/${models[pathParam].artworkId}/paying');
                       },
-                // onPressed: () {
-                //   // !isSoldOut ? context.goNamed('') : null;
-                // },
                 child: Text(
                   !isSoldOut ? '구매하기' : '판매완료',
                   style: TextStyle(
@@ -120,12 +149,13 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   }) {
     return SliverToBoxAdapter(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(
             imagePath,
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,
+            height: 350,
           ),
           const SizedBox(
             height: 16.0,
@@ -137,12 +167,18 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(
+            height: 8.0,
+          ),
           Text(
             creator,
             style: const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
+          ),
+          const SizedBox(
+            height: 8.0,
           ),
         ],
       ),
@@ -164,13 +200,19 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
               fontWeight: FontWeight.w800,
             ),
           ),
-          Text(
-            content,
-            style: const TextStyle(
-              fontSize: 14.0,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 4.0,
             ),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
+            child: Text(
+              content,
+              style: const TextStyle(
+                fontSize: 14.0,
+              ),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
@@ -178,7 +220,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   }
 
   SliverToBoxAdapter _divider() {
-    return SliverToBoxAdapter(
+    return const SliverToBoxAdapter(
       child: Divider(),
     );
   }
@@ -200,45 +242,48 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
               fontWeight: FontWeight.w800,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset(
-                'assets/icons/logo_short.png',
-                fit: BoxFit.cover,
-                width: 50,
-              ),
-              const SizedBox(
-                width: 25,
-              ),
-              Expanded(
-                child: Text(
-                  creator,
-                  style: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w800,
-                  ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/icons/logo_short.png',
+                  fit: BoxFit.cover,
+                  width: 50,
                 ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+                const SizedBox(
+                  width: 25,
+                ),
+                Expanded(
+                  child: Text(
+                    creator,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w800,
                     ),
-                    borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-                onPressed: btnPressed,
-                child: const Text(
-                  '바로가기 >',
-                  style: TextStyle(
-                    color: Colors.black,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  onPressed: btnPressed,
+                  child: const Text(
+                    '바로가기 >',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

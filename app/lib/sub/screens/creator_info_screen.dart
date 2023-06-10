@@ -1,6 +1,8 @@
 import 'package:app/common/layout/base_layout.dart';
+import 'package:app/common/model/demmy_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CreatorInfoScreen extends ConsumerStatefulWidget {
   const CreatorInfoScreen({super.key});
@@ -12,6 +14,7 @@ class CreatorInfoScreen extends ConsumerStatefulWidget {
 class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
   // 장애정보 토글여부
   bool isToggled = false;
+  int pathParam = 0;
 
   void toggle() {
     setState(() {
@@ -21,21 +24,26 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
-      appBarTitle: Text(
-        '작가 소개',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
+    pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          '작가 소개',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: CustomScrollView(
         slivers: [
           _topCreatorInfo(
-            htmlStory:
-                '포용은 사랑이예요! \n정은혜 작가는 서로 다른 사람을 그립니다. \n개개인의 고유한 특성을 담은 그림을 통해 사람이 갖고 있는 아름다움을 전달합니다.',
+            htmlStory: models[pathParam].creatorIntroduce,
             imagePath: 'assets/images/user_profile.png',
           ),
-          _toggleContainer(isToggled: isToggled, content: '다운 증후군은 가장 흔한....'),
+          _toggleContainer(
+            isToggled: isToggled,
+            content: models[pathParam].disableContent,
+          ),
           _divider(),
           _bottomTitle(),
           // _bottomGallary(),
@@ -73,7 +81,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          '다운 증후군',
+                          models[pathParam].disableType,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14.0,
@@ -81,7 +89,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                           ),
                         ),
                         Text(
-                          '작가 이름',
+                          '작가 ${models[pathParam].creator}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
@@ -190,9 +198,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                       return Builder(
                         builder: (BuildContext context) {
                           return GestureDetector(
-                            onTap: () {
-                              print(index);
-                            },
+                            onTap: () {},
                             child: Column(
                               children: [
                                 Expanded(
@@ -202,7 +208,8 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                                     child: Image.asset(
                                       'assets/images/image${index}.jpg',
                                       fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
                                     ),
                                   ),
                                 ),
