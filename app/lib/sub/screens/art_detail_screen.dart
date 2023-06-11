@@ -193,11 +193,14 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w800,
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
           Padding(
@@ -248,7 +251,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(
-                  'assets/icons/logo_short.png',
+                  'assets/icons/active_poa.png',
                   fit: BoxFit.cover,
                   width: 50,
                 ),

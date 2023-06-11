@@ -111,6 +111,9 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
               width: 150,
               height: 150,
             ),
+            SizedBox(
+              width: 16.0,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

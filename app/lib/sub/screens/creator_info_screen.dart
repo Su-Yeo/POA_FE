@@ -1,3 +1,4 @@
+import 'package:app/base/components/art.dart';
 import 'package:app/common/layout/base_layout.dart';
 import 'package:app/common/model/demmy_model.dart';
 import 'package:flutter/material.dart';
@@ -188,39 +189,49 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [1, 2, 3, 4, 5].map(
-                    (index) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: Card(
-                                    elevation: 4,
-                                    child: Image.asset(
-                                      'assets/images/image${index}.jpg',
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.7,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: models.map((data) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.go('/gallary/${data.artworkId}');
                     },
-                  ).toList(),
-                ),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Art(
+                        model: data,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                // children: [1, 2, 3, 4, 5].map(
+                //   (index) {
+                //     return Builder(
+                //       builder: (BuildContext context) {
+                //         return GestureDetector(
+                //           onTap: () {},
+                //           child: Column(
+                //             children: [
+                //               Expanded(
+                //                 flex: 4,
+                //                 child: Card(
+                //                   elevation: 4,
+                //                   child: Image.asset(
+                //                     'assets/images/image${index}.jpg',
+                //                     fit: BoxFit.cover,
+                //                     width: MediaQuery.of(context).size.width *
+                //                         0.7,
+                //                   ),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                // ).toList(),
               ),
             ),
           ],
