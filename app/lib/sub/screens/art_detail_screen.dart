@@ -85,7 +85,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
                   isLike
                       ? showSnackbar(
                           context,
-                          '응원을 더했습니다',
+                          '작가님께 응원의 메세지를 보내드릴게요!',
                         )
                       : showSnackbar(
                           context,

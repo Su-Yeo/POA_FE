@@ -17,7 +17,7 @@ class BuyingListCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              '배송준비중',
+              '결제완료',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
@@ -75,7 +75,7 @@ class BuyingListCard extends StatelessWidget {
               ),
             ),
             const Text(
-              '2022.05.11 결제',
+              '2023.06.11.15:25 결제',
               textAlign: TextAlign.end,
               style: TextStyle(
                 color: Colors.redAccent,
