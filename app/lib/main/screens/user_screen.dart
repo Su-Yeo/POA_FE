@@ -14,7 +14,7 @@ class UserScreen extends ConsumerStatefulWidget {
 }
 
 class _UserScreenState extends ConsumerState<UserScreen> {
-  Future<UserModel> getUser(WidgetRef ref, int value) async {
+  Future getUser(WidgetRef ref, int value) async {
     final dio = ref.watch(dioProvider);
     final resp = await dio.get(
       'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/findUser/$value',
@@ -31,7 +31,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         fit: BoxFit.contain,
         width: 100,
       ),
-      body: FutureBuilder<UserModel>(
+      body: FutureBuilder(
         future: getUser(ref, 2),
         builder: (_, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
@@ -42,6 +42,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             );
           }
           items = UserModel.fromJson(snapshot.data);
+
           return CustomScrollView(
             shrinkWrap: true,
             slivers: [

@@ -38,12 +38,12 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
       body: CustomScrollView(
         slivers: [
           _topCreatorInfo(
-            htmlStory: models[pathParam].creatorIntroduce,
+            htmlStory: models[pathParam].userName,
             imagePath: 'assets/images/user_profile.png',
           ),
           _toggleContainer(
             isToggled: isToggled,
-            content: models[pathParam].disableContent,
+            content: models[pathParam].userName,
           ),
           _divider(),
           _bottomTitle(),
@@ -82,7 +82,8 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          models[pathParam].disableType,
+                          'd',
+                          // models[pathParam].disableType,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14.0,
@@ -90,7 +91,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                           ),
                         ),
                         Text(
-                          '작가 ${models[pathParam].creator}',
+                          '작가 ${models[pathParam].userName}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
@@ -277,31 +278,6 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
               },
             ).toList(),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class WBox extends StatelessWidget {
-  final Color color;
-  final String title;
-  const WBox({
-    super.key,
-    required this.color,
-    this.title = '안녕',
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
-        color: color,
-        height: MediaQuery.of(context).size.height * 0.15,
-        width: MediaQuery.of(context).size.width * 0.3,
-        child: Center(
-          child: Text(title),
         ),
       ),
     );

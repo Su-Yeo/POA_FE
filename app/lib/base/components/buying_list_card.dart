@@ -61,7 +61,7 @@ class BuyingListCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '작가 ${models[0].creator}',
+                            '작가 ${models[0].userName}',
                             style: TextStyle(
                               color: lineColor,
                               fontSize: 12.0,

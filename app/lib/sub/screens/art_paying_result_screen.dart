@@ -70,7 +70,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
                     ),
                   ),
                   Text(
-                    '작가정보: ${models[pathParam].creator}',
+                    '작가정보: ${models[pathParam].userName}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],

@@ -1,8 +1,10 @@
 import 'package:app/common/const/format_amount.dart';
+import 'package:app/common/model/art_work_model.dart';
+import 'package:app/common/providers/dio_provider.dart';
+import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app/common/model/demmy_model.dart';
 
 class ArtDetailScreen extends ConsumerStatefulWidget {
   const ArtDetailScreen({super.key});
@@ -15,6 +17,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   bool isLike = false;
   bool isSoldOut = false;
   int pathParam = 0;
+  int userId = 0;
 
   // 스낵바
   void showSnackbar(BuildContext context, String message) {
@@ -28,8 +31,17 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
+  Future getArtDetail(WidgetRef ref, int index) async {
+    final dio = ref.watch(dioProvider);
+    final resp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/$index',
+    );
+    return resp.data;
+  }
+
   @override
   Widget build(BuildContext context) {
+    ArtWorkModel item;
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
@@ -40,39 +52,54 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: CustomScrollView(
-          shrinkWrap: true,
-          slivers: [
-            _topArtInfo(
-              context: context,
-              imagePath: models[pathParam].fileUrl,
-              artTitle: models[pathParam].title,
-              creator: '작가 ${models[pathParam].creator}',
+      body: FutureBuilder(
+        future: getArtDetail(ref, pathParam),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
+          item = ArtWorkModel.fromJson(snapshot.data);
+          userId = item.artworkId;
+          isLike = item.like;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                _topArtInfo(
+                  context: context,
+                  imagePath: item.fileUrl,
+                  artTitle: item.title,
+                  creator: '작가 ${item.userName}',
+                ),
+                _divider(),
+                _midInfo(
+                  title: '작품 정보',
+                  content:
+                      '가격: ${formatAmount(item.artworkPrice.toString())}\n사이즈: ${item.artworkSize}',
+                ),
+                _divider(),
+                _midInfo(
+                  title: '작품 소개',
+                  content: item.content,
+                ),
+                _divider(),
+                _bottomInfo(
+                  btnPressed: () {
+                    context.go('/user/${item.userId}');
+                  },
+                  title: '작가 정보',
+                  creator: '작가 ${item.userName}',
+                  index: 1,
+                ),
+              ],
             ),
-            _divider(),
-            _midInfo(
-              title: '작품 정보',
-              content:
-                  '가격: ${formatAmount(models[pathParam].artworkPrice.toString())}\n사이즈: ${models[pathParam].artworkSize}',
-            ),
-            _divider(),
-            _midInfo(
-              title: '작품 소개',
-              content: models[pathParam].content,
-            ),
-            _divider(),
-            _bottomInfo(
-              btnPressed: () {
-                context.go('/user/${models[pathParam].userId}');
-              },
-              title: '작가 정보',
-              creator: '작가 ${models[pathParam].creator}',
-              index: 1,
-            ),
-          ],
-        ),
+          );
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -94,9 +121,9 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
                 });
               },
               child: Image.asset(
-                !isLike
-                    ? 'assets/icons/like_inactive.png'
-                    : 'assets/icons/like_active.png',
+                isLike
+                    ? 'assets/icons/like_active.png'
+                    : 'assets/icons/like_inactive.png',
                 fit: BoxFit.cover,
                 width: 40,
               ),
@@ -124,8 +151,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
                 onPressed: isSoldOut
                     ? null
                     : () {
-                        context.go(
-                            '/gallary/${models[pathParam].artworkId}/paying');
+                        context.go('/gallary/$userId/paying');
                       },
                 child: Text(
                   !isSoldOut ? '구매하기' : '판매완료',
@@ -149,9 +175,8 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   }) {
     return SliverToBoxAdapter(
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
+          Image.network(
             imagePath,
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,

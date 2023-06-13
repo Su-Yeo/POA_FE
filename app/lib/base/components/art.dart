@@ -49,7 +49,7 @@ class Art extends ConsumerWidget {
                 ),
               ),
               Text(
-                '작가 ${model.creator}',
+                '작가 ${model.userName}',
               ),
             ],
           ),

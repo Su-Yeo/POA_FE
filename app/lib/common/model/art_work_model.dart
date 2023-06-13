@@ -4,40 +4,46 @@ part 'art_work_model.g.dart';
 
 @JsonSerializable()
 class ArtWorkModel {
+  @JsonKey(
+    name: 'artwork_id',
+  )
   final int artworkId;
+  @JsonKey(
+    name: 'user_id',
+  )
   final int userId;
   @JsonKey(
-    fromJson: pathToUrl,
+    name: 'user_name',
+  )
+  final String userName;
+  @JsonKey(
+    name: 'file_url',
   )
   final String fileUrl;
   final String title;
-  final String creator;
-  final String creatorIntroduce;
-  final String disableType;
-  final String disableContent;
+
   final String content;
+  @JsonKey(
+    name: 'artwork_price',
+  )
   final int artworkPrice;
+  @JsonKey(
+    name: 'artwork_size',
+  )
   final String artworkSize;
-  final int likeCnt;
+  final bool like;
 
   ArtWorkModel({
     required this.artworkId,
     required this.userId,
+    required this.userName,
     required this.fileUrl,
     required this.title,
     required this.content,
     required this.artworkPrice,
     required this.artworkSize,
-    required this.likeCnt,
-    required this.creator,
-    required this.creatorIntroduce,
-    required this.disableType,
-    required this.disableContent,
+    required this.like,
   });
-
-  static pathToUrl(String value) {
-    return "http://192.168.71.5:8080/$value";
-  }
 
   factory ArtWorkModel.fromJson(Map<String, dynamic> json) =>
       _$ArtWorkModelFromJson(json);
