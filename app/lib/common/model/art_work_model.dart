@@ -31,6 +31,10 @@ class ArtWorkModel {
     name: 'artwork_size',
   )
   final String artworkSize;
+  @JsonKey(
+    name: 'artwork_state',
+  )
+  final int artworkState;
   final bool like;
 
   ArtWorkModel({
@@ -42,6 +46,7 @@ class ArtWorkModel {
     required this.content,
     required this.artworkPrice,
     required this.artworkSize,
+    required this.artworkState,
     required this.like,
   });
 

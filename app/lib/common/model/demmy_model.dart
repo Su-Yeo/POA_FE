@@ -12,6 +12,7 @@ List<ArtWorkModel> models = [
     artworkPrice: 30000,
     artworkSize: '100 x 100',
     like: true,
+    artworkState: 0,
   ),
   ArtWorkModel(
     artworkId: 1,
@@ -23,6 +24,7 @@ List<ArtWorkModel> models = [
     artworkPrice: 78000,
     artworkSize: '300 x 300',
     like: true,
+    artworkState: 0,
   ),
 ];
 

@@ -8,7 +8,11 @@ enum SortingBtnNames {
 }
 
 class SortingBtn extends ConsumerStatefulWidget {
-  const SortingBtn({super.key});
+  final String path;
+  const SortingBtn({
+    required this.path,
+    super.key,
+  });
 
   @override
   ConsumerState<SortingBtn> createState() => _SortingBtnState();
@@ -21,14 +25,26 @@ class _SortingBtnState extends ConsumerState<SortingBtn> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _sortingBtn(SortingBtnNames.latest),
-        _sortingBtn(SortingBtnNames.likes),
-        _sortingBtn(SortingBtnNames.onSale),
+        _sortingBtn(
+          SortingBtnNames.latest,
+          () {
+            print(widget.path);
+            print('최신순');
+          },
+        ),
+        _sortingBtn(
+          SortingBtnNames.likes,
+          () {
+            print(widget.path);
+            print('좋아요순');
+          },
+        ),
+        _sortingBtn(SortingBtnNames.onSale, () {}),
       ],
     );
   }
 
-  Widget _sortingBtn(SortingBtnNames name) {
+  Widget _sortingBtn(SortingBtnNames name, VoidCallback btnPressed) {
     bool isActive = name == initBtnName;
     String btnText = name.toString() == 'SortingBtnNames.latest'
         ? '최신순'
@@ -43,7 +59,16 @@ class _SortingBtnState extends ConsumerState<SortingBtn> {
         left: 4.0,
       ),
       child: TextButton(
-        onPressed: isActive ? null : () => _updateActiveBtn(name),
+        onPressed: isActive
+            ? null
+            : () {
+                btnPressed;
+                setState(
+                  () {
+                    initBtnName = name;
+                  },
+                );
+              },
         style: ButtonStyle(
           shape: MaterialStateProperty.all<OutlinedBorder>(
             RoundedRectangleBorder(
@@ -64,7 +89,7 @@ class _SortingBtnState extends ConsumerState<SortingBtn> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 4.0,
             horizontal: 8.0,
           ),
@@ -79,9 +104,11 @@ class _SortingBtnState extends ConsumerState<SortingBtn> {
     );
   }
 
-  void _updateActiveBtn(SortingBtnNames name) {
+  void _updateActiveBtn(SortingBtnNames name, VoidCallback btnPressed) {
     setState(() {
+      btnPressed;
       initBtnName = name;
+      print("$name 이 눌렸습니다.");
     });
   }
 }

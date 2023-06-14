@@ -15,6 +15,7 @@ ArtWorkModel _$ArtWorkModelFromJson(Map<String, dynamic> json) => ArtWorkModel(
       content: json['content'] as String,
       artworkPrice: json['artwork_price'] as int,
       artworkSize: json['artwork_size'] as String,
+      artworkState: json['artwork_state'] as int,
       like: json['like'] as bool,
     );
 
@@ -28,5 +29,6 @@ Map<String, dynamic> _$ArtWorkModelToJson(ArtWorkModel instance) =>
       'content': instance.content,
       'artwork_price': instance.artworkPrice,
       'artwork_size': instance.artworkSize,
+      'artwork_state': instance.artworkState,
       'like': instance.like,
     };
