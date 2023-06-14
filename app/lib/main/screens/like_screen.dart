@@ -15,11 +15,18 @@ class LikeScreen extends ConsumerStatefulWidget {
 }
 
 class _LikeScreenState extends ConsumerState<LikeScreen> {
+  int userId = 0;
   Future getLikeArtWorks(WidgetRef ref) async {
     final dio = ref.watch(dioProvider);
-    final resp = await dio.get(
-      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/wishlist',
+    final userResp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/findUser/1',
     );
+
+    userId = userResp.data['user_id'];
+    final resp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/findWishlist/$userId',
+    );
+
     return resp.data;
   }
 

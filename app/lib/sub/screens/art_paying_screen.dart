@@ -25,6 +25,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
   String addressDetailValue = '';
   String selectPayOption = '';
   int pathParam = 0;
+  bool checkTerm = false;
 
   @override
   void dispose() {
@@ -85,6 +86,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
           item = ArtWorkModel.fromJson(snapshot.data);
           return CustomScrollView(
             slivers: [
+              _divider(),
               _topInfo(item),
               _divider(),
               _midInfo(),
@@ -104,12 +106,13 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             '구매하기',
             style: TextStyle(
               color: Colors.white,
+              fontWeight: FontWeight.w700,
             ),
           ),
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
-                4.0,
+                8.0,
               ),
             ),
             backgroundColor: primaryColor,
@@ -125,20 +128,24 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
     );
   }
 
+/* 그림 인포 */
   SliverToBoxAdapter _topInfo(item) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32.0,
+          vertical: 16.0,
+        ),
         child: Row(
           children: [
             Image.network(
               item.fileUrl,
               fit: BoxFit.contain,
               width: 150,
-              height: 150,
+              // height: 100,
             ),
             const SizedBox(
-              width: 16.0,
+              width: 24.0,
             ),
             Expanded(
               child: Column(
@@ -147,22 +154,23 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                   Text(
                     item.title,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18.0,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
                   ),
                   Text(
                     '작가정보: ${item.userName}',
                     style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.grey[500],
+                      fontSize: 14.0,
                     ),
                   ),
                   Text(
                     '작품가격: ${formatAmount(item.artworkPrice.toString())}',
                     style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.grey[500],
+                      fontSize: 14.0,
                     ),
                   ),
                 ],
@@ -181,6 +189,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
         vertical: 8.0,
       ),
       child: Row(
@@ -192,7 +201,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             child: Text(
               label,
               style: const TextStyle(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 fontSize: 16.0,
               ),
             ),
@@ -209,18 +218,21 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
   SliverPadding _midInfo() {
     return SliverPadding(
       padding: const EdgeInsets.all(
-        16.0,
+        8.0,
       ),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.only(bottom: 16.0),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Text(
                 '구매자 정보',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 18.0,
                 ),
               ),
@@ -228,7 +240,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
             _midInputForm(
               label: '이   름',
               input: const Text(
-                '포니어',
+                '최호영',
               ),
             ),
             _midInputForm(
@@ -272,27 +284,28 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
 
   SliverPadding _bottomInfo(item) {
     return SliverPadding(
-      padding: const EdgeInsets.all(
-        16.0,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
       ),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                '결제 수단',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
-                ),
+            Text(
+              '결제 수단',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18.0,
               ),
             ),
             ListTile(
               // dense: true,
               title: const Text(
                 '카드결제',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               leading: Radio(
                 autofocus: true,
@@ -306,40 +319,84 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                 },
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 36.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Text(
-                      '최종 결제 금액',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Text(
+                        '최종 결제 금액',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      formatAmount(item.artworkPrice.toString()),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        formatAmount(item.artworkPrice.toString()),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-            const Text(
-              '주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.',
-              style: TextStyle(
-                fontSize: 10.0,
-                color: lineColor,
+            const Padding(
+              padding: EdgeInsets.only(
+                top: 8.0,
+                left: 32.0,
+              ),
+              child: Text(
+                '주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10.0,
+                  color: lineColor,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: checkTerm,
+                        activeColor: Colors.red,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            checkTerm = !checkTerm;
+                          });
+                        },
+                      ),
+                      const Text(
+                        '개인정보 제3 자 제공 동의',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '내용보기',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -349,17 +406,22 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
   }
 
 // 연락처
-  TextFormField _midContactInfo() {
-    return TextFormField(
-      controller: _contactController,
-      keyboardType: TextInputType.phone,
-      decoration: customInputTheme.copyWith(hintText: '010-0000-0000'),
-      onChanged: (value) {
-        contactValue = value;
-      },
-      inputFormatters: [
-        ContactInputFormatter(),
-      ],
+  Widget _midContactInfo() {
+    return SizedBox(
+      height: 40,
+      child: TextFormField(
+        controller: _contactController,
+        keyboardType: TextInputType.phone,
+        decoration: customInputTheme.copyWith(
+          hintText: '010-0000-0000',
+        ),
+        onChanged: (value) {
+          contactValue = value;
+        },
+        inputFormatters: [
+          ContactInputFormatter(),
+        ],
+      ),
     );
   }
 
@@ -370,39 +432,49 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         Row(
           children: [
             Expanded(
-              child: TextFormField(
-                controller: _addressController1,
-                keyboardType: TextInputType.streetAddress,
-                decoration: customInputTheme.copyWith(
-                  hintText: '주소지를 검색하세요',
+              child: SizedBox(
+                height: 40,
+                child: TextFormField(
+                  controller: _addressController1,
+                  keyboardType: TextInputType.streetAddress,
+                  decoration: customInputTheme.copyWith(
+                    hintText: '주소지를 검색하세요',
+                  ),
+                  onChanged: (value) {
+                    addressValue = value;
+                  },
                 ),
-                onChanged: (value) {
-                  addressValue = value;
-                },
               ),
             ),
             const SizedBox(
               width: 8.0,
             ),
             // 주소검색
-            ElevatedButton(
-              onPressed: () {
-                HapticFeedback.mediumImpact();
-                _addressAPI();
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    4.0,
+            SizedBox(
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () {
+                  HapticFeedback.mediumImpact();
+                  _addressAPI();
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      0.0,
+                    ),
                   ),
+                  backgroundColor: Colors.white,
                 ),
-                backgroundColor: primaryColor,
-              ),
-              child: const Text(
-                '주소 검색',
-                style: TextStyle(
-                  color: Colors.white,
+                child: const Text(
+                  '주소 검색',
+                  style: TextStyle(
+                    color: primaryColor,
+                  ),
                 ),
               ),
             ),
@@ -411,15 +483,18 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
         const SizedBox(
           height: 8.0,
         ),
-        TextFormField(
-          controller: _addressController2,
-          keyboardType: TextInputType.streetAddress,
-          decoration: customInputTheme.copyWith(
-            hintText: '상세주소 입력',
+        SizedBox(
+          height: 50,
+          child: TextFormField(
+            controller: _addressController2,
+            keyboardType: TextInputType.streetAddress,
+            decoration: customInputTheme.copyWith(
+              hintText: '상세주소 입력',
+            ),
+            onChanged: (value) {
+              addressDetailValue = value;
+            },
           ),
-          onChanged: (value) {
-            addressDetailValue = value;
-          },
         ),
       ],
     );

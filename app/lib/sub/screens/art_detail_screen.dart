@@ -22,11 +22,18 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   // 스낵바
   void showSnackbar(BuildContext context, String message) {
     final snackbar = SnackBar(
+      backgroundColor: Colors.grey[200],
       behavior: SnackBarBehavior.floating,
       duration: const Duration(
         seconds: 2,
       ),
-      content: Text(message),
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: primaryColor,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
@@ -34,7 +41,20 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
   Future getArtDetail(WidgetRef ref, int index) async {
     final dio = ref.watch(dioProvider);
     final resp = await dio.get(
-      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/$index',
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/$index/1',
+    );
+    return resp.data;
+  }
+
+  Future postWishList(WidgetRef ref, int index) async {
+    final dio = ref.watch(dioProvider);
+    final resp = await dio.post(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/saveWishlist',
+      data: {
+        "wishlist_id": 0,
+        "artwork_id": index,
+        "user_id": 1,
+      },
     );
     return resp.data;
   }
@@ -45,6 +65,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text(
           '작품 소개',
           style: TextStyle(
@@ -107,18 +128,21 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
           children: [
             TextButton(
               onPressed: () {
-                setState(() {
-                  isLike = !isLike;
-                  isLike
-                      ? showSnackbar(
-                          context,
-                          '작가님께 응원의 메세지를 보내드릴게요!',
-                        )
-                      : showSnackbar(
-                          context,
-                          '응원을 취소했습니다',
-                        );
-                });
+                setState(
+                  () {
+                    isLike = !isLike;
+                    isLike
+                        ? showSnackbar(
+                            context,
+                            '작가님께 따뜻한 응원 메세지가 전달되었어요',
+                          )
+                        : showSnackbar(
+                            context,
+                            '응원을 취소했습니다',
+                          );
+                    postWishList(ref, userId);
+                  },
+                );
               },
               child: Image.asset(
                 isLike
@@ -143,7 +167,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
-                      4.0,
+                      8.0,
                     ),
                   ),
                   backgroundColor: !isSoldOut ? Colors.black : Colors.grey,
@@ -157,6 +181,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
                   !isSoldOut ? '구매하기' : '판매완료',
                   style: TextStyle(
                     color: !isSoldOut ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -176,14 +201,17 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          Image.network(
-            imagePath,
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-            height: 350,
+          Card(
+            elevation: 4,
+            child: Image.network(
+              imagePath,
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+              height: 350,
+            ),
           ),
           const SizedBox(
-            height: 16.0,
+            height: 22.0,
           ),
           Text(
             artTitle,
@@ -199,7 +227,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
             creator,
             style: const TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(
@@ -210,39 +238,48 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
     );
   }
 
-  SliverToBoxAdapter _midInfo({
+  SliverPadding _midInfo({
     required String title,
     required String content,
   }) {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.w800,
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16.0,
+                bottom: 8.0,
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 4.0,
-            ),
-            child: Text(
-              content,
-              style: const TextStyle(
-                fontSize: 14.0,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 4.0,
               ),
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
+              child: Text(
+                content,
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -253,67 +290,84 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
     );
   }
 
-  SliverToBoxAdapter _bottomInfo({
+  SliverPadding _bottomInfo({
     required String title,
     required String creator,
     required int index,
     required VoidCallback btnPressed,
   }) {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w800,
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16.0,
+                bottom: 8.0,
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/icons/active_poa.png',
-                  fit: BoxFit.cover,
-                  width: 50,
-                ),
-                const SizedBox(
-                  width: 25,
-                ),
-                Expanded(
-                  child: Text(
-                    creator,
-                    style: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w800,
-                    ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 4.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/icons/active_poa.png',
+                    fit: BoxFit.cover,
+                    width: 50,
                   ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  Expanded(
+                    child: Text(
+                      creator,
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w700,
                       ),
-                      borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: btnPressed,
-                  child: const Text(
-                    '바로가기 >',
-                    style: TextStyle(
-                      color: Colors.black,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: primaryColor,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    onPressed: btnPressed,
+                    child: const Text(
+                      '바로가기 >',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(
+              height: 24.0,
+            ),
+          ],
+        ),
       ),
     );
   }

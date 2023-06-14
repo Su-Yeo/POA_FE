@@ -125,7 +125,7 @@ class _SortingButtonState extends State<SortingButton> {
         _sortingBtn(
           SortingBtnNames.likes,
           () {
-            print(widget.path);
+            // print(widget.path);
           },
         ),
         _sortingBtn(SortingBtnNames.onSale, () {}),

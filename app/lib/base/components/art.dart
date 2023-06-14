@@ -12,6 +12,7 @@ class Art extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
+      elevation: 2,
       child: Container(
         height: 400,
         decoration: BoxDecoration(
@@ -30,7 +31,7 @@ class Art extends ConsumerWidget {
             children: [
               Expanded(
                 child: Card(
-                  elevation: 4,
+                  elevation: 1,
                   child: Image.network(
                     model.fileUrl,
                     fit: BoxFit.cover,

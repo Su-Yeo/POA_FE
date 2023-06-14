@@ -13,9 +13,9 @@ var customThemeData = ThemeData(
 
 var customInputTheme = const InputDecoration(
   isCollapsed: true,
-  contentPadding: EdgeInsets.all(16.0),
+  isDense: true,
+  contentPadding: EdgeInsets.all(8.0),
   errorMaxLines: 1,
-  fillColor: bgColor,
   focusedBorder: OutlineInputBorder(
     borderSide: BorderSide(
       color: primaryColor,

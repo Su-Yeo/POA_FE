@@ -1,7 +1,5 @@
 import 'package:app/base/components/art.dart';
-import 'package:app/common/model/art_work_model.dart';
 import 'package:app/common/model/creator_model.dart';
-import 'package:app/common/model/demmy_model.dart';
 import 'package:app/common/providers/dio_provider.dart';
 import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
@@ -88,8 +86,8 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
     required CreatorModel item,
   }) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 32.0,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 48.0,
         vertical: 16.0,
       ),
       sliver: SliverToBoxAdapter(
@@ -97,10 +95,11 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/images/creator_profile.png',
+                Image.network(
+                  item.profileUrl,
+                  // 'assets/images/creator_profile.png',
                   fit: BoxFit.cover,
-                  width: 150,
+                  width: 117,
                 ),
                 const SizedBox(
                   width: 16,
@@ -116,8 +115,11 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                           style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w700,
                           ),
+                        ),
+                        const SizedBox(
+                          height: 8.0,
                         ),
                         Text(
                           '작가 ${item.name}',
@@ -135,13 +137,16 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
             ),
             // 작가 소개
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 16.0,
+              ),
               child: Text(
                 htmlStory,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 5,
                 style: const TextStyle(
                   color: Colors.black,
+                  fontSize: 16.0,
                 ),
               ),
             ),
@@ -161,7 +166,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
   }) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 24.0,
+        horizontal: 32.0,
       ),
       sliver: SliverToBoxAdapter(
         child: Column(
@@ -233,6 +238,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                       },
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.7,
+                        // height: 300,
                         child: Art(
                           model: data,
                         ),
