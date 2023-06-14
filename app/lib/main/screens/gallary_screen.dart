@@ -1,33 +1,51 @@
 import 'package:app/base/components/art.dart';
 import 'package:app/base/components/sorting_btn.dart';
 import 'package:app/common/layout/base_layout.dart';
+import 'package:app/common/model/art_work_model.dart';
 import 'package:app/common/model/demmy_model.dart';
 import 'package:app/common/providers/dio_provider.dart';
 import 'package:app/common/repositories/art_work_repository.dart';
+import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class GallaryScreen extends ConsumerWidget {
+class GallaryScreen extends ConsumerStatefulWidget {
   const GallaryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Future<ArtWorkRepository> getArtWorks() async {
-      final repository = ArtWorkRepository(ref.watch(dioProvider),
-          baseUrl: 'http://192.168.71.5:8080');
-      return repository;
-    }
+  ConsumerState<GallaryScreen> createState() => _GallaryScreenState();
+}
 
+class _GallaryScreenState extends ConsumerState<GallaryScreen> {
+  Future getArtWorks(WidgetRef ref) async {
+    final dio = ref.watch(dioProvider);
+    final resp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/last',
+    );
+    return resp.data;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BaseLayout(
       appBarTitle: Image.asset(
         'assets/icons/logo_short.png',
         fit: BoxFit.contain,
         width: 100,
       ),
-      body: FutureBuilder<ArtWorkRepository>(
-        future: getArtWorks(),
-        builder: (context, snapshot) {
+      body: FutureBuilder(
+        future: getArtWorks(ref),
+        builder: (_, AsyncSnapshot snapshot) {
+          print(snapshot);
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,16 +61,19 @@ class GallaryScreen extends ConsumerWidget {
                     itemCount: 1,
                     itemBuilder: (context, index) {
                       return Column(
-                        children: models.map((data) {
-                          return GestureDetector(
-                            onTap: () {
-                              context.go('/gallary/${data.artworkId}');
-                            },
-                            child: Art(
-                              model: data,
-                            ),
-                          );
-                        }).toList(),
+                        children: snapshot.data.map<Widget>(
+                          (data) {
+                            final item = ArtWorkModel.fromJson(data);
+                            return GestureDetector(
+                              onTap: () {
+                                context.go('/gallary/${item.artworkId}');
+                              },
+                              child: Art(
+                                model: item,
+                              ),
+                            );
+                          },
+                        ).toList(),
                       );
                     },
                   ),

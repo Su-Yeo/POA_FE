@@ -74,10 +74,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   flex: 5,
                                   child: Card(
                                     elevation: 4,
-                                    child: Image.network(
-                                      item.fileUrl,
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
+                                    child: Hero(
+                                      tag: item.artworkId,
+                                      child: Image.network(
+                                        item.fileUrl,
+                                        fit: BoxFit.cover,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
                                     ),
                                   ),
                                 ),

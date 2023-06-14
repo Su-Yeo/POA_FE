@@ -31,7 +31,7 @@ class Art extends ConsumerWidget {
               Expanded(
                 child: Card(
                   elevation: 4,
-                  child: Image.asset(
+                  child: Image.network(
                     model.fileUrl,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width * 0.9,
