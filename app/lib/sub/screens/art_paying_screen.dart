@@ -1,6 +1,7 @@
 import 'package:app/base/components/dlg_confirm.dart';
 import 'package:app/common/const/format_amount.dart';
-import 'package:app/common/model/demmy_model.dart';
+import 'package:app/common/model/art_work_model.dart';
+import 'package:app/common/providers/dio_provider.dart';
 import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,8 +48,17 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
     );
   }
 
+  Future getBuyingDetail(WidgetRef ref, int index) async {
+    final dio = ref.watch(dioProvider);
+    final resp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/$index',
+    );
+    return resp.data;
+  }
+
   @override
   Widget build(BuildContext context) {
+    ArtWorkModel item;
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
@@ -59,14 +69,30 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          _topInfo(),
-          _divider(),
-          _midInfo(),
-          _divider(),
-          _bottomInfo(),
-        ],
+      body: FutureBuilder(
+        future: getBuyingDetail(
+          ref,
+          pathParam,
+        ),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
+          item = ArtWorkModel.fromJson(snapshot.data);
+          return CustomScrollView(
+            slivers: [
+              _topInfo(item),
+              _divider(),
+              _midInfo(),
+              _divider(),
+              _bottomInfo(item),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -74,7 +100,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
           onPressed: () {
             confirmPurchase(context, pathParam);
           },
-          child: Text(
+          child: const Text(
             '구매하기',
             style: TextStyle(
               color: Colors.white,
@@ -99,19 +125,19 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
     );
   }
 
-  SliverToBoxAdapter _topInfo() {
+  SliverToBoxAdapter _topInfo(item) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Image.asset(
-              models[pathParam].fileUrl,
+            Image.network(
+              item.fileUrl,
               fit: BoxFit.contain,
               width: 150,
               height: 150,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16.0,
             ),
             Expanded(
@@ -119,21 +145,21 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    models[pathParam].title,
-                    style: TextStyle(
+                    item.title,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
                   ),
                   Text(
-                    '작가정보: ${models[pathParam].userName}',
+                    '작가정보: ${item.userName}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
                     ),
                   ),
                   Text(
-                    '작품가격: ${formatAmount(models[pathParam].artworkPrice.toString())}',
+                    '작품가격: ${formatAmount(item.artworkPrice.toString())}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
@@ -244,7 +270,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
     );
   }
 
-  SliverPadding _bottomInfo() {
+  SliverPadding _bottomInfo(item) {
     return SliverPadding(
       padding: const EdgeInsets.all(
         16.0,
@@ -264,8 +290,10 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
               ),
             ),
             ListTile(
-              dense: true,
-              title: const Text('카드결제'),
+              // dense: true,
+              title: const Text(
+                '카드결제',
+              ),
               leading: Radio(
                 autofocus: true,
                 value: '카드결제',
@@ -298,7 +326,7 @@ class _ArtPayingScreenState extends ConsumerState<ArtPayingScreen> {
                       ),
                     ),
                     Text(
-                      formatAmount(models[pathParam].artworkPrice.toString()),
+                      formatAmount(item.artworkPrice.toString()),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
