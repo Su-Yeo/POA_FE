@@ -1,5 +1,8 @@
 import 'package:app/common/const/format_amount.dart';
+import 'package:app/common/model/art_work_model.dart';
 import 'package:app/common/model/demmy_model.dart';
+import 'package:app/common/providers/dio_provider.dart';
+import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,25 +17,46 @@ class ArtPayingResultScreen extends ConsumerStatefulWidget {
 
 class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
   int pathParam = 0;
+  Future getBuyingDetail(WidgetRef ref, int index) async {
+    final dio = ref.watch(dioProvider);
+    final resp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/artwork/$index',
+    );
+    return resp.data;
+  }
 
   @override
   Widget build(BuildContext context) {
+    ArtWorkModel item;
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '구매하기',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          _topInfo(),
-          _divider(),
-          _bottomMessage(),
-        ],
+      body: FutureBuilder(
+        future: getBuyingDetail(ref, pathParam),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
+          item = ArtWorkModel.fromJson(snapshot.data);
+          return CustomScrollView(
+            slivers: [
+              _topInfo(item),
+              _divider(),
+              _bottomMessage(),
+            ],
+          );
+        },
       ),
     );
   }
@@ -43,14 +67,14 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
     );
   }
 
-  SliverToBoxAdapter _topInfo() {
+  SliverToBoxAdapter _topInfo(ArtWorkModel item) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Image.asset(
-              models[pathParam].fileUrl,
+            Image.network(
+              item.fileUrl,
               fit: BoxFit.contain,
               width: 150,
               height: 150,
@@ -63,21 +87,21 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    models[pathParam].title,
+                    item.title,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
                   ),
                   Text(
-                    '작가정보: ${models[pathParam].userName}',
+                    '작가정보: ${item.userName}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
                     ),
                   ),
                   Text(
-                    '작품가격: ${formatAmount(models[pathParam].artworkPrice.toString())}',
+                    '작품가격: ${formatAmount(item.artworkPrice.toString())}',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey[500],
