@@ -1,6 +1,9 @@
 import 'package:app/base/components/art.dart';
-import 'package:app/common/layout/base_layout.dart';
+import 'package:app/common/model/art_work_model.dart';
+import 'package:app/common/model/creator_model.dart';
 import 'package:app/common/model/demmy_model.dart';
+import 'package:app/common/providers/dio_provider.dart';
+import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,8 +26,17 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
     });
   }
 
+  Future getCreatorInfo(WidgetRef ref, int index) async {
+    final dio = ref.watch(dioProvider);
+    final resp = await dio.get(
+      'http://ec2-44-203-136-252.compute-1.amazonaws.com/api/findCreator/$index',
+    );
+    return resp.data;
+  }
+
   @override
   Widget build(BuildContext context) {
+    CreatorModel item;
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
@@ -35,20 +47,37 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          _topCreatorInfo(
-            htmlStory: models[pathParam].userName,
-            imagePath: 'assets/images/user_profile.png',
-          ),
-          _toggleContainer(
-            isToggled: isToggled,
-            content: models[pathParam].userName,
-          ),
-          _divider(),
-          _bottomTitle(),
-          // _bottomGallary(),
-        ],
+      body: FutureBuilder(
+        future: getCreatorInfo(ref, pathParam),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
+          item = CreatorModel.fromJson(snapshot.data);
+          return CustomScrollView(
+            slivers: [
+              _topCreatorInfo(
+                htmlStory: item.story,
+                imagePath: 'assets/images/user_profile.png',
+                item: item,
+              ),
+              _toggleContainer(
+                isToggled: isToggled,
+                content: item.name,
+                item: item,
+              ),
+              _divider(),
+              _bottomTitle(
+                item: item,
+              ),
+              // _bottomGallary(),
+            ],
+          );
+        },
       ),
     );
   }
@@ -56,6 +85,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
   SliverPadding _topCreatorInfo({
     required String htmlStory,
     required String imagePath,
+    required CreatorModel item,
   }) {
     return SliverPadding(
       padding: EdgeInsets.symmetric(
@@ -77,22 +107,21 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(right: 16.0),
+                    padding: const EdgeInsets.only(right: 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'd',
-                          // models[pathParam].disableType,
-                          style: TextStyle(
+                          item.disabledType,
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
-                          '작가 ${models[pathParam].userName}',
-                          style: TextStyle(
+                          '작가 ${item.name}',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -111,7 +140,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                 htmlStory,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 5,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                 ),
               ),
@@ -128,9 +157,10 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
   SliverPadding _toggleContainer({
     required bool isToggled,
     required String content,
+    required CreatorModel item,
   }) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 24.0,
       ),
       sliver: SliverToBoxAdapter(
@@ -151,8 +181,8 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: SizedBox(
                       child: Text(
-                        content,
-                        style: TextStyle(
+                        item.disabledText,
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 12.0,
                         ),
@@ -167,14 +197,16 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
   }
 
   SliverToBoxAdapter _divider() {
-    return SliverToBoxAdapter(
+    return const SliverToBoxAdapter(
       child: Divider(),
     );
   }
 
-  SliverPadding _bottomTitle() {
+  SliverPadding _bottomTitle({
+    required CreatorModel item,
+  }) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 32.0,
         vertical: 16.0,
       ),
@@ -182,7 +214,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               '작가의 갤러리',
               style: TextStyle(
                 color: Colors.black,
@@ -193,91 +225,24 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: models.map((data) {
-                  return GestureDetector(
-                    onTap: () {
-                      context.go('/gallary/${data.artworkId}');
-                    },
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: Art(
-                        model: data,
-                      ),
-                    ),
-                  );
-                }).toList(),
-                // children: [1, 2, 3, 4, 5].map(
-                //   (index) {
-                //     return Builder(
-                //       builder: (BuildContext context) {
-                //         return GestureDetector(
-                //           onTap: () {},
-                //           child: Column(
-                //             children: [
-                //               Expanded(
-                //                 flex: 4,
-                //                 child: Card(
-                //                   elevation: 4,
-                //                   child: Image.asset(
-                //                     'assets/images/image${index}.jpg',
-                //                     fit: BoxFit.cover,
-                //                     width: MediaQuery.of(context).size.width *
-                //                         0.7,
-                //                   ),
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         );
-                //       },
-                //     );
-                //   },
-                // ).toList(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  SliverToBoxAdapter _bottomGallary() {
-    return SliverToBoxAdapter(
-      child: Container(
-        height: 100,
-        width: 100,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [1, 2, 3, 4, 5].map(
-              (index) {
-                return Builder(
-                  builder: (BuildContext context) {
+                children: item.artworkDtoList.map(
+                  (data) {
                     return GestureDetector(
                       onTap: () {
-                        print(index);
+                        context.go('/gallary/${data.artworkId}');
                       },
-                      child: Column(
-                        children: [
-                          Flexible(
-                            flex: 5,
-                            child: Card(
-                              elevation: 4,
-                              child: Image.asset(
-                                'assets/images/image${index}.jpg',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: Art(
+                          model: data,
+                        ),
                       ),
                     );
                   },
-                );
-              },
-            ).toList(),
-          ),
+                ).toList(),
+              ),
+            ),
+          ],
         ),
       ),
     );

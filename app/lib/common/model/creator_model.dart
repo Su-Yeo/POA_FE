@@ -7,11 +7,17 @@ part 'creator_model.g.dart';
 class CreatorModel {
   final String name;
   @JsonKey(
-    fromJson: pathToUrl,
+    name: 'profile_url',
   )
   final String profileUrl;
   final String story;
+  @JsonKey(
+    name: 'disabled_type',
+  )
   final String disabledType;
+  @JsonKey(
+    name: 'disabled_text',
+  )
   final String disabledText;
   final List<ArtWorkModel> artworkDtoList;
 
@@ -23,10 +29,6 @@ class CreatorModel {
     required this.disabledText,
     required this.artworkDtoList,
   });
-
-  static pathToUrl(String value) {
-    return "http://192.168.71.5:8080/$value";
-  }
 
   factory CreatorModel.fromJson(Map<String, dynamic> json) =>
       _$CreatorModelFromJson(json);

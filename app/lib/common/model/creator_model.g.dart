@@ -8,10 +8,10 @@ part of 'creator_model.dart';
 
 CreatorModel _$CreatorModelFromJson(Map<String, dynamic> json) => CreatorModel(
       name: json['name'] as String,
-      profileUrl: CreatorModel.pathToUrl(json['profileUrl'] as String),
+      profileUrl: json['profile_url'] as String,
       story: json['story'] as String,
-      disabledType: json['disabledType'] as String,
-      disabledText: json['disabledText'] as String,
+      disabledType: json['disabled_type'] as String,
+      disabledText: json['disabled_text'] as String,
       artworkDtoList: (json['artworkDtoList'] as List<dynamic>)
           .map((e) => ArtWorkModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -20,9 +20,9 @@ CreatorModel _$CreatorModelFromJson(Map<String, dynamic> json) => CreatorModel(
 Map<String, dynamic> _$CreatorModelToJson(CreatorModel instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'profileUrl': instance.profileUrl,
+      'profile_url': instance.profileUrl,
       'story': instance.story,
-      'disabledType': instance.disabledType,
-      'disabledText': instance.disabledText,
+      'disabled_type': instance.disabledType,
+      'disabled_text': instance.disabledText,
       'artworkDtoList': instance.artworkDtoList,
     };

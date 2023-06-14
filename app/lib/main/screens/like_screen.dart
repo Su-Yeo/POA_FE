@@ -1,7 +1,6 @@
 import 'package:app/base/components/art.dart';
 import 'package:app/common/layout/base_layout.dart';
 import 'package:app/common/model/art_work_model.dart';
-import 'package:app/common/model/demmy_model.dart';
 import 'package:app/common/providers/dio_provider.dart';
 import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';

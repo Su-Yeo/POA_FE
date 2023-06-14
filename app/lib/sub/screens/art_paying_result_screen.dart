@@ -1,6 +1,5 @@
 import 'package:app/common/const/format_amount.dart';
 import 'package:app/common/model/art_work_model.dart';
-import 'package:app/common/model/demmy_model.dart';
 import 'package:app/common/providers/dio_provider.dart';
 import 'package:app/common/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +78,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
               width: 150,
               height: 150,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16.0,
             ),
             Expanded(
@@ -88,7 +87,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
                 children: [
                   Text(
                     item.title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18.0,
                     ),
@@ -125,7 +124,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
             const SizedBox(
               height: 24.0,
             ),
-            Text(
+            const Text(
               '구매 완료 되었습니다.',
               style: TextStyle(
                 color: Colors.red,
@@ -136,7 +135,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
             const SizedBox(
               height: 24.0,
             ),
-            Text(
+            const Text(
               '독자님의 응원이 독자님께 큰 힘이 됩니다.',
             ),
             const SizedBox(
@@ -149,7 +148,7 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
                     onPressed: () {
                       context.go('/gallary');
                     },
-                    child: Text(
+                    child: const Text(
                       '확인',
                       style: TextStyle(
                         color: Colors.white,
