@@ -1,3 +1,4 @@
+import 'package:app/common/providers/active_btn_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,9 +9,7 @@ enum SortingBtnNames {
 }
 
 class SortingBtn extends ConsumerStatefulWidget {
-  final String path;
   const SortingBtn({
-    required this.path,
     super.key,
   });
 
@@ -20,31 +19,57 @@ class SortingBtn extends ConsumerStatefulWidget {
 
 class _SortingBtnState extends ConsumerState<SortingBtn> {
   SortingBtnNames initBtnName = SortingBtnNames.latest;
+
+  String activeButon = '최신순';
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(activeButtonNotifierProvider.notifier);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _sortingBtn(
           SortingBtnNames.latest,
           () {
-            print(widget.path);
-            print('최신순');
+            setState(() {
+              activeButon = '최신순';
+              state.setActiveButton(
+                btnName: activeButon,
+              );
+            });
           },
+          state.getActiveButton == '최신순',
         ),
         _sortingBtn(
           SortingBtnNames.likes,
           () {
-            print(widget.path);
-            print('좋아요순');
+            setState(() {
+              activeButon = '좋아요순';
+              state.setActiveButton(
+                btnName: activeButon,
+              );
+            });
           },
+          state.getActiveButton == '좋아요순',
         ),
-        _sortingBtn(SortingBtnNames.onSale, () {}),
+        _sortingBtn(
+          SortingBtnNames.onSale,
+          () {
+            setState(() {
+              activeButon = '판매중';
+              state.setActiveButton(
+                btnName: activeButon,
+              );
+            });
+          },
+          state.getActiveButton == '판매중',
+        ),
       ],
     );
   }
 
-  Widget _sortingBtn(SortingBtnNames name, VoidCallback btnPressed) {
+  Widget _sortingBtn(
+      SortingBtnNames name, VoidCallback btnPressed, bool isActive) {
     bool isActive = name == initBtnName;
     String btnText = name.toString() == 'SortingBtnNames.latest'
         ? '최신순'
@@ -62,7 +87,7 @@ class _SortingBtnState extends ConsumerState<SortingBtn> {
         onPressed: isActive
             ? null
             : () {
-                btnPressed;
+                btnPressed();
                 setState(
                   () {
                     initBtnName = name;
@@ -102,13 +127,5 @@ class _SortingBtnState extends ConsumerState<SortingBtn> {
         ),
       ),
     );
-  }
-
-  void _updateActiveBtn(SortingBtnNames name, VoidCallback btnPressed) {
-    setState(() {
-      btnPressed;
-      initBtnName = name;
-      print("$name 이 눌렸습니다.");
-    });
   }
 }

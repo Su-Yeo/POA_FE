@@ -65,6 +65,12 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.grey, // 선의 색상
+            width: 1.0, // 선의 두께
+          ),
+        ),
         backgroundColor: Colors.white,
         title: const Text(
           '작품 소개',
@@ -264,9 +270,9 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 4.0,
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                bottom: 8.0,
               ),
               child: Text(
                 content,
@@ -307,7 +313,7 @@ class _ArtDetailScreenState extends ConsumerState<ArtDetailScreen> {
             Padding(
               padding: const EdgeInsets.only(
                 top: 16.0,
-                bottom: 8.0,
+                bottom: 4.0,
               ),
               child: Text(
                 title,

@@ -10,6 +10,12 @@ class UserBuyingListScreen extends ConsumerWidget {
     final ScrollController _controller = ScrollController();
     return Scaffold(
       appBar: AppBar(
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.grey, // 선의 색상
+            width: 1.0, // 선의 두께
+          ),
+        ),
         title: Text(
           '구매목록',
           style: TextStyle(

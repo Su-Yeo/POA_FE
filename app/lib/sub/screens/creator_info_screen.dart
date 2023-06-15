@@ -38,6 +38,12 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.grey, // 선의 색상
+            width: 1.0, // 선의 두께
+          ),
+        ),
         title: const Text(
           '작가 소개',
           style: TextStyle(
@@ -177,7 +183,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
               child: Text(
                 !isToggled ? '장애 정보 ∨' : '장애 정보 ∧',
                 style: TextStyle(
-                  color: Colors.grey[500],
+                  color: Color.fromARGB(255, 74, 74, 74),
                 ),
               ),
             ),
@@ -188,7 +194,7 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                       child: Text(
                         item.disabledText,
                         style: const TextStyle(
-                          color: Colors.grey,
+                          color: Color.fromARGB(255, 74, 74, 74),
                           fontSize: 12.0,
                         ),
                       ),
@@ -226,6 +232,9 @@ class _CreatorInfoScreenState extends ConsumerState<CreatorInfoScreen> {
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
+            ),
+            const SizedBox(
+              height: 24.0,
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,

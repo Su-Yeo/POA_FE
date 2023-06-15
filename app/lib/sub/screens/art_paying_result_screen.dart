@@ -30,6 +30,12 @@ class _ArtPayingResultScreenState extends ConsumerState<ArtPayingResultScreen> {
     pathParam = int.parse(GoRouterState.of(context).pathParameters['index']!);
     return Scaffold(
       appBar: AppBar(
+        shape: const Border(
+          bottom: BorderSide(
+            color: Colors.grey, // 선의 색상
+            width: 1.0, // 선의 두께
+          ),
+        ),
         title: const Text(
           '구매하기',
           style: TextStyle(

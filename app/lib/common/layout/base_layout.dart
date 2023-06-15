@@ -23,6 +23,12 @@ class BaseLayout extends StatelessWidget {
   AppBar? _appBar(BuildContext context) {
     if (needAppBar) return null;
     return AppBar(
+      shape: const Border(
+        bottom: BorderSide(
+          color: Colors.grey, // 선의 색상
+          width: 1.0, // 선의 두께
+        ),
+      ),
       toolbarHeight: 50,
       backgroundColor: Colors.white,
       elevation: 0,
